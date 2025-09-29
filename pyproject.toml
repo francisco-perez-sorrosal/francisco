@@ -1,0 +1,105 @@
+[project]
+name = "francisco"
+version = "0.0.1"
+description = "MCP server with Francisco agent for self-replication"
+authors = [
+    {name = "Francisco Perez-Sorrosal", email = "fperezsorrosal@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">= 3.11"
+dependencies = [
+    "loguru>=0.7.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "python-dotenv>=1.0.0",
+    "pydantic>=2.0.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "ruff>=0.1.0",
+    "python-semantic-release>=8.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[tool.pixi.dependencies]
+python = "3.11.*"
+loguru = "*"
+typer = "*"
+rich = "*"
+python-dotenv = "*"
+pydantic = "*"
+pyyaml = "*"
+pip = "*"
+
+[tool.pixi.pypi-dependencies]
+mcp = "==1.14.1"
+openai-agents = "==0.3.2"
+
+[tool.pixi.environments]
+default = { solve-group = "default" }
+dev = { features = ["dev"], solve-group = "default" }
+
+[tool.pixi.activation]
+env = { PYTHONPATH = "src" }
+
+[tool.pixi.tasks]
+cli = "python -m francisco.main"
+serve = "python -m francisco.main serve"
+config = "python -m francisco.main config"
+test = "pytest tests/"
+lint = "ruff check src/ tests/"
+format = "ruff format src/ tests/"
+check = "ruff check src/ tests/ && pytest tests/"
+
+[tool.pixi.feature.dev.dependencies]
+pytest = "*"
+ruff = "*"
+python-semantic-release = "*"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-string-normalization = false
+line-ending = "auto"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+build_command = "pip install build && python -m build"
+upload_to_pypi = false
+upload_to_release = true
+hvcs = "github"

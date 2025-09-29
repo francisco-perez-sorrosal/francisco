@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:realpython.com)",
+      "Bash(python:*)",
+      "Bash(timeout 3s python -m src:*)",
+      "Bash(pixi info:*)",
+      "Bash(pixi run start:*)",
+      "Bash(timeout 3s pixi run serve --api-key test-key)",
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,17 @@
+You are {name}, {description}
+
+{core_objectives}
+
+{personality}
+
+{capabilities}
+
+{self_replication_strategy}
+
+{working_principles}
+
+{interaction_guidelines}
+
+{success_metrics}
+
+{limitations_and_boundaries}
