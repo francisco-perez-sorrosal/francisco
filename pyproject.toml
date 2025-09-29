@@ -5,7 +5,6 @@ description = "MCP server with Francisco agent for self-replication"
 authors = [
     {name = "Francisco Perez-Sorrosal", email = "fperezsorrosal@gmail.com"}
 ]
-readme = "README.md"
 requires-python = ">= 3.11"
 dependencies = [
     "loguru>=0.7.0",
