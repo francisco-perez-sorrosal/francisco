@@ -139,6 +139,9 @@ def serve(
     ),
     log_level: str = typer.Option(
         "INFO", "--log-level", "-l", help="Logging level"
+    ),
+    transport: str = typer.Option(
+        os.getenv("MCP_TRANSPORT", "stdio"), "--transport", "-t", help="Transport type: 'stdio' or 'streamable-http'"
     )
 ):
     """Start the Francisco MCP server."""
@@ -154,13 +157,13 @@ def serve(
         if api_key:
             os.environ["OPENAI_API_KEY"] = api_key
 
-        rprint("[bold blue]🚀 Starting Francisco MCP Server[/bold blue]")
+        rprint(f"[bold blue]🚀 Starting Francisco MCP Server ({transport})[/bold blue]")
         rprint("[dim]✨ Initializing agent with self-replication capabilities...[/dim]")
         rprint("[dim]🎯 Ready to assist with Python development tasks![/dim]")
         rprint()
 
-        # Run the simplified MCP server
-        run_mcp_server()
+        # Run the simplified MCP server with specified transport
+        run_mcp_server(transport=transport)
 
     except KeyboardInterrupt:
         rprint("\n[bold yellow]👋 Francisco MCP Server stopped[/bold yellow]")
@@ -171,12 +174,7 @@ def serve(
 
 
 def main():
-    """Main entry point."""
-    # Check for required environment variables
-    if not os.getenv("OPENAI_API_KEY"):
-        rprint("[bold yellow]⚠️  Warning: OPENAI_API_KEY not found in environment[/bold yellow]")
-        rprint("[dim]Set OPENAI_API_KEY environment variable or use --api-key option[/dim]")
-    
+    """Main entry point."""    
     app()
 
 

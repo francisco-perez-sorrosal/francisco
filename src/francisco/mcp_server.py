@@ -40,6 +40,14 @@ async def invoke(input: str, context: Optional[Dict[str, Any]] = None) -> str:
     Returns:
         Agent response as a string
     """
+
+    # Check for required environment variables
+    if not os.getenv("OPENAI_API_KEY"):
+        logger.error("[bold red]❌  Warning: OPENAI_API_KEY not found in environment[/bold red]")
+        logger.error("[dim]Set OPENAI_API_KEY environment variable or use --api-key option[/dim]")
+        return "OPENAI_API_KEY not found in environment!"
+    
+    
     initialize_agent()
     logger.info(f"Invoking agent with input: {input}")
 
@@ -66,17 +74,28 @@ async def status() -> str:
     if agent is None:
         raise RuntimeError("Agent not properly initialized")
 
-    status_text = f"""# Francisco Agent Status
-
-{agent.config}"""
+    status_text = f"""# Francisco Agent Status\n\n{agent.config}"""
 
     return status_text
 
 
-def main():
-    """Main entry point for the MCP server."""
-    logger.info("Starting Francisco MCP server...")
-    mcp.run()
+def main(transport: str = "stdio"):
+    """Main entry point for the MCP server.
+
+    Args:
+        transport: Transport type - "stdio" or "streamable-http"
+    """
+    match transport:
+        case "streamable-http":
+            # Configure for HTTP transport
+            mcp.run(transport="streamable-http")
+        case "stdio":
+            # Default to stdio transport for "stdio" or any other value
+            mcp.run(transport="stdio")
+        case _:
+            raise ValueError(f"Invalid transport: {transport}")
+
+    logger.info(f"Starting Francisco MCP server with {transport} transport...")
 
 
 if __name__ == "__main__":

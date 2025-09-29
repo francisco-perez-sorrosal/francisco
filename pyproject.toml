@@ -55,6 +55,8 @@ env = { PYTHONPATH = "src" }
 [tool.pixi.tasks]
 cli = "python -m francisco.main"
 serve = "python -m francisco.main serve"
+serve-http = "python -m francisco.main serve --transport streamable-http"
+generate-req = "uv pip compile pyproject.toml > requirements.txt && cat requirements.txt"
 config = "python -m francisco.main config"
 test = "pytest tests/"
 lint = "ruff check src/ tests/"
